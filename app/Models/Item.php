@@ -17,4 +17,8 @@ class Item extends Model
         'is_active',
         'category_id',
     ];
+
+    function category() {
+        return $this->belongsTo(Category::class);
+    }
 }
