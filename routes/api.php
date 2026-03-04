@@ -9,6 +9,6 @@ Route::apiResource('items', ItemController::class);
 
 Route::apiResource('categories', CategoryController::class);
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+// Route::get('/user', function (Request $request) {
+//     return $request->user();
+// })->middleware('auth:sanctum');
