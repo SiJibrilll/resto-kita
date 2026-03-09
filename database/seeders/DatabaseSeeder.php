@@ -4,6 +4,9 @@ namespace Database\Seeders;
 
 use App\Models\Category;
 use App\Models\Item;
+use App\Models\Order;
+use App\Models\Table;
+use App\Models\TableSession;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -145,5 +148,24 @@ class DatabaseSeeder extends Seeder
                 );
             }
         }
+
+        $table = Table::create([
+            'number' => 1,
+        ]);
+
+        $tableSession = TableSession::create([
+            'table_id' => $table->id,
+            'token' => 'abc',
+            'seated_at' => now()
+        ]);
+
+        $tableSession->orders()->create();
+
+        $order = Order::first();
+
+        $order->items()->create([
+            'item_id' => 1,
+            'amount' => 2
+        ]);
     }
 }

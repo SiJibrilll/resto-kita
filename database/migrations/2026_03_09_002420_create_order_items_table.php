@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('item_id')->constrained();
             $table->foreignId('order_id')->constrained();
             $table->integer('amount');
-            $table->text('note');
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }
