@@ -54,7 +54,6 @@ class OrderControllerTest extends TestCase
 
         $response = $this->withToken($this->token)->postJson('api/orders', $payload);
 
-        $response->dump();
         $response->assertCreated();
         $response->assertJsonPath('data.confirmed', true);
         $response->assertJsonPath('data.order_items.0.item.id', $item1->id);
