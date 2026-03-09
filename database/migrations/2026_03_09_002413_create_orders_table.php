@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('table_session_id')->constrained();
-            $table->boolean('confirmed')->default(false);
+            $table->boolean('confirmed')->default(true);
             $table->timestamps();
         });
     }
