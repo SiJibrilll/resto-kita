@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrderItemResource extends JsonResource
+class InvoiceResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,9 +16,9 @@ class OrderItemResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'amount' => $this->amount,
-            'order' => new OrderResource($this->whenLoaded('order')),
-            'item' => new ItemResource($this->whenLoaded('item')),
+            'grand_total' => $this->grand_total,
+            'status' => $this->status,
+            'orders' => OrderResource::collection($this->whenLoaded('table_session')->orders)
         ];
     }
 }

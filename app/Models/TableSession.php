@@ -18,4 +18,8 @@ class TableSession extends Model
     function orders() {
         return $this->hasMany(Order::class);
     }
+
+    function invoice() {
+        return $this->hasOne(Invoice::class);
+    }
 }

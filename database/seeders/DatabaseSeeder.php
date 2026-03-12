@@ -167,5 +167,11 @@ class DatabaseSeeder extends Seeder
             'item_id' => 1,
             'amount' => 2
         ]);
+        
+        $order->items()->create([
+            'item_id' => 3,
+            'amount' => 2
+        ]);
+
     }
 }

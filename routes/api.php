@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Http\Request;
@@ -12,6 +13,8 @@ Route::middleware('table_session.validate')->group(function () {
     Route::apiResource('categories', CategoryController::class);
     
     Route::apiResource('orders', OrderController::class);
+
+    Route::post('/table-sessions/{token}/checkout', [CheckoutController::class, 'checkout']);
 });
 
 // Route::get('/user', function (Request $request) {

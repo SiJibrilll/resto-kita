@@ -11,12 +11,7 @@ use Tests\TestCase;
 
 class OrderControllerTest extends TestCase
 {
-    protected $token = 'abc';
-
-    use RefreshDatabase;
-
-    protected $seed = true;
-
+    
     /**
      * A basic feature test example.
      */

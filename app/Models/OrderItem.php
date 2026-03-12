@@ -10,6 +10,11 @@ class OrderItem extends Model
         'item_id',
         'amount'
     ];
+
+    public function getSubtotalAttribute()
+    {
+        return $this->amount * $this->item->price;
+    }
     
     function item() {
         return $this->belongsTo(Item::class);
