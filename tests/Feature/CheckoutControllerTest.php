@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Invoice;
 use App\Models\TableSession;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -24,6 +25,10 @@ class CheckoutControllerTest extends TestCase
         $this->assertDatabaseHas(TableSession::class, [
             'id' => $tableSession->id,
             'status' => 'checked_out'
+        ]);
+
+        $this->assertDatabaseHas(Invoice::class, [
+            'table_session_id' => $tableSession->id
         ]);
     }
 }
