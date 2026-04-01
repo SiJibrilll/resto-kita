@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Midtrans\Config;
 use Midtrans\Snap;
 class PaymentController extends Controller
@@ -65,5 +66,57 @@ class PaymentController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
+    }
+
+    public function handleWebhook(Request $request)
+    {
+        $notif = $request->all();
+
+        // Verify signature key
+        $signatureKey = hash('sha512',
+            $notif['order_id'] .
+            $notif['status_code'] .
+            $notif['gross_amount'] .
+            config('midtrans.server_key')
+        );
+
+        if ($signatureKey !== $notif['signature_key']) {
+            return response()->json(['message' => 'Invalid signature'], 403);
+        }
+
+        $invoice_id           = $notif['order_id'];
+        $transactionStatus = $notif['transaction_status'];
+        $fraudStatus       = $notif['fraud_status'] ?? null;
+        $paymentMethod = $notif['payment_tyoe'];
+
+        // Map Midtrans statuses to your app's logic
+        if ($transactionStatus === 'capture' && $fraudStatus === 'accept') {
+            // Payment success - credit card
+            $status = 'paid';
+        } elseif ($transactionStatus === 'settlement') {
+            // Payment success - bank transfer / e-wallet
+            $status = 'paid';
+        } elseif (in_array($transactionStatus, ['cancel', 'deny', 'expire'])) {
+            $status = 'failed';
+        } else {
+            $status = 'pending';
+        }
+
+        DB::beginTransaction();
+
+        $invoice = Invoice::with('payment')->find($invoice_id);
+        $invoice->status = $status;
+        $invoice->update();
+
+        $payment = $invoice->payment;
+
+        $payment->status = $status;
+        $payment->payment_method = $paymentMethod;
+
+        $payment->update();
+
+        DB::commit();
+
+        return response()->json(['message' => 'OK']);
     }
 }
