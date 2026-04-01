@@ -19,6 +19,7 @@ RUN composer install --no-interaction --prefer-dist
 # Laravel setup
 RUN php artisan config:clear || true
 RUN php artisan cache:clear || true
+RUN touch database/database.sqlite
 
 # Expose port
 EXPOSE 8000
