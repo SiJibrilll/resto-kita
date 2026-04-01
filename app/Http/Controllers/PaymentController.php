@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Midtrans\Config;
@@ -112,11 +113,23 @@ class PaymentController extends Controller
 
         $payment->status = $status;
         $payment->payment_method = $paymentMethod;
+        $payment->paid_at = $status === 'paid' ? now() : null;
 
         $payment->update();
 
         DB::commit();
 
         return response()->json(['message' => 'OK']);
+    }
+
+    public function status(Request $request, $invoiceId)
+    {
+        $payment = Payment::where('invoice_id', $invoiceId)
+            ->select('status', 'payment_method', 'paid_at')
+            ->firstOrFail();
+
+        return response()->json([
+            'data' => $payment
+        ]);
     }
 }
