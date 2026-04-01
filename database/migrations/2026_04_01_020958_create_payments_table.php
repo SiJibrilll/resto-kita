@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('invoice_id')->constrained();
-            $table->decimal('grand_total', 19, 2);
-            $table->string('payment_method');
-            $table->string('customer_name');
+            $table->decimal('grand_total', 19, 2)->nullable();
+            $table->string('payment_method')->nullable();
+            $table->enum('status', ['pending', 'paid'])->default('pending');
+            $table->string('snap_token')->nullable();
+            $table->string('customer_name')->nullable();
             $table->timestamps();
         });
     }

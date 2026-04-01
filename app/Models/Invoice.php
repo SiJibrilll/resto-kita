@@ -15,4 +15,8 @@ class Invoice extends Model
     function table_session() {
         return $this->belongsTo(TableSession::class);
     }
+
+    function payment() {
+        return $this->hasOne(Payment::class);
+    }
 }
