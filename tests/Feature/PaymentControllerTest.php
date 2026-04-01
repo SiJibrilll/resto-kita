@@ -51,4 +51,25 @@ class PaymentControllerTest extends TestCase
 
         $responseSecondPayment->assertStatus(200);
     }
+
+    public function test_it_can_check_for_payment_status(): void
+    {
+        $tableSession = TableSession::first();
+
+        $responseCheckout = $this->withToken($tableSession->token)->postJson('/api/table-sessions/abc/checkout')->json();
+        
+        $responsePayment = $this->postJson('/api/payments/create', ['invoice_id' => $responseCheckout['data']['id'], 'customer_name' => 'John'])->json();
+
+        $responseStatus = $this->getJson('/api/payments/status/' . $responseCheckout['data']['id']);
+
+        $responseStatus->assertJsonStructure([
+            'data' => [
+                'status',
+                'paid_at',
+                'payment_method'
+            ]
+        ]);
+
+        $responseStatus->assertStatus(200);
+    }
 }

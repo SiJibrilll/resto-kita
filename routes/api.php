@@ -16,9 +16,13 @@ Route::middleware('table_session.validate')->group(function () {
     Route::apiResource('orders', OrderController::class);
 
     Route::post('/table-sessions/{token}/checkout', [CheckoutController::class, 'checkout']);
-    });
+});
     
-    Route::post('/payments/create', [PaymentController::class, 'createTransaction']);
+Route::post('/payments/create', [PaymentController::class, 'createTransaction']);
+
+Route::post('/payments/webhook', [PaymentController::class, 'webhook']);
+
+Route::get('/payments/status/{invoiceId}', [PaymentController::class, 'status']);
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
