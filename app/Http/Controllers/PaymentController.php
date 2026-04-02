@@ -88,7 +88,7 @@ class PaymentController extends Controller
         $invoice_id           = $notif['order_id'];
         $transactionStatus = $notif['transaction_status'];
         $fraudStatus       = $notif['fraud_status'] ?? null;
-        $paymentMethod = $notif['payment_tyoe'];
+        $paymentMethod = $notif['payment_type'];
 
         // Map Midtrans statuses to your app's logic
         if ($transactionStatus === 'capture' && $fraudStatus === 'accept') {
