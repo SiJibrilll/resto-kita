@@ -89,6 +89,7 @@ class PaymentController extends Controller
         $transactionStatus = $notif['transaction_status'];
         $fraudStatus       = $notif['fraud_status'] ?? null;
         $paymentMethod = $notif['payment_type'];
+        
 
         // Map Midtrans statuses to your app's logic
         if ($transactionStatus === 'capture' && $fraudStatus === 'accept') {
@@ -105,7 +106,13 @@ class PaymentController extends Controller
 
         DB::beginTransaction();
 
-        $invoice = Invoice::with('payment')->find($invoice_id);
+        $parts = explode('-', $invoice_id);
+
+        // ["INV", "12", "65f1a8c9b3e21"]
+        $realInvoiceId = $parts[1] ?? null;
+
+        $invoice = Invoice::with('payment')->find($realInvoiceId);
+        // $invoice = Invoice::with('payment')->find($invoice_id);
         $invoice->status = $status;
         $invoice->update();
 
