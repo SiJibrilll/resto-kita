@@ -40,8 +40,8 @@ class PaymentController extends Controller
         // No token yet — fetch one from Midtrans
         $params = [
             'transaction_details' => [
-                'order_id'     => $invoice->id,
-                'gross_amount' => $invoice->grand_total,
+                'order_id' => uniqid('INV-' . $invoice->id . '-'),
+                'gross_amount' => (int) $invoice->grand_total,
             ],
             'customer_details' => [
                 'first_name' => $validated['customer_name'],
@@ -49,17 +49,17 @@ class PaymentController extends Controller
         ];
 
         try {
-            $snapToken = Snap::getSnapToken($params);
+            $snapTransaction = Snap::createTransaction($params);
 
             // Persist the token so we never need to fetch it again
             $invoice->payment()->create([
-                'snap_token' => $snapToken,
+                'snap_token' => $snapTransaction->token,
                 'customer_name' => $validated['customer_name']
             ]);
 
             return response()->json([
                 'data' => [
-                    'snap_token' => $snapToken,
+                    'snap_token' => $snapTransaction->token,
                     'client_key' => config('midtrans.client_key'),
                     'from_cache'  => false,
                 ]
