@@ -22,7 +22,7 @@ Route::middleware('table_session.validate')->group(function () {
     
 Route::post('/payments/create', [PaymentController::class, 'createTransaction']);
 
-Route::post('/payments/webhook', [PaymentController::class, 'webhook']);
+Route::post('/payments/webhook', [PaymentController::class, 'handleWebhook']);
 
 Route::get('/payments/status/{invoiceId}', [PaymentController::class, 'status']);
 
