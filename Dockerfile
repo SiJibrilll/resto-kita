@@ -1,9 +1,14 @@
 FROM php:8.4-cli
 
-# Install system dependencies
+## Install system dependencies + libraries for GD & Imagick
 RUN apt-get update && apt-get install -y \
     unzip git curl libzip-dev zip \
-    && docker-php-ext-install zip pdo pdo_mysql 
+    libpng-dev libjpeg-dev libfreetype6-dev \
+    libmagickwand-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install gd zip pdo pdo_mysql \
+    && pecl install imagick \
+    && docker-php-ext-enable imagick
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
