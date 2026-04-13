@@ -149,9 +149,12 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        $table = Table::create([
-            'number' => 1,
-        ]);
+        for ($i=1; $i <= 10; $i++) { 
+            $table = Table::create([
+                'number' => 1,
+            ]);
+        }
+        
 
         $tableSession = TableSession::create([
             'table_id' => $table->id,

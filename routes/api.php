@@ -5,6 +5,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\TableSessionController;
 use App\Models\Table;
 use App\Models\TableSession;
 use Illuminate\Http\Request;
@@ -26,21 +27,23 @@ Route::post('/payments/webhook', [PaymentController::class, 'webhook']);
 
 Route::get('/payments/status/{invoiceId}', [PaymentController::class, 'status']);
 
-Route::get('/sementara', function ()  {
-    $table = Table::firstOrCreate(['id' => 1], ['number' => '1']);
+Route::post('/table-sessions/generate', [TableSessionController::class, 'generateSession']);
 
-    $session = TableSession::create([
-        'table_id' => $table->id,
-        'token' => str()->random(5),
-        'seated_at' => now()
-    ]);
+// Route::get('/sementara', function ()  {
+//     $table = Table::firstOrCreate(['id' => 1], ['number' => '1']);
 
-    return response()->json( [
-        'data' => [
-            'token' => $session->token
-        ]
-    ]);
-});
+//     $session = TableSession::create([
+//         'table_id' => $table->id,
+//         'token' => str()->random(5),
+//         'seated_at' => now()
+//     ]);
+
+//     return response()->json( [
+//         'data' => [
+//             'token' => $session->token
+//         ]
+//     ]);
+// });
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();

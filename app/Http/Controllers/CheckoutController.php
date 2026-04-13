@@ -6,6 +6,8 @@ use App\Http\Resources\InvoiceResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use function Symfony\Component\Clock\now;
+
 class CheckoutController extends Controller
 {
     function checkout(string $token, Request $request) {
@@ -23,7 +25,8 @@ class CheckoutController extends Controller
             ]);
 
             $tableSession->update([
-                'status' => 'checked_out'
+                'status' => 'checked_out',
+                'checked_out_at' => now()
             ]);
 
             return $invoice;
