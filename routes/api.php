@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('table_session.validate')->group(function () {
     Route::apiResource('items', ItemController::class);
     
-    Route::apiResource('categories', CategoryController::class);
+    Route::apiResource('categories', CategoryController::class)->only(['show', 'index']);
     
     Route::apiResource('orders', OrderController::class);
 
@@ -28,6 +28,10 @@ Route::post('/payments/webhook', [PaymentController::class, 'handleWebhook']);
 Route::get('/payments/status/{invoiceId}', [PaymentController::class, 'status']);
 
 Route::post('/table-sessions/generate', [TableSessionController::class, 'generateSession']);
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::apiResource('categories', CategoryController::class);
+});
 
 // Route::get('/sementara', function ()  {
 //     $table = Table::firstOrCreate(['id' => 1], ['number' => '1']);
