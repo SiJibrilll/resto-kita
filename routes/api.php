@@ -31,6 +31,7 @@ Route::post('/table-sessions/generate', [TableSessionController::class, 'generat
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::apiResource('categories', CategoryController::class);
+    Route::apiResource('items', ItemController::class);
 });
 
 // Route::get('/sementara', function ()  {
