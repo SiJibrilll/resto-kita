@@ -33,6 +33,7 @@ class ItemController extends Controller
             'description' => ['required', 'string'],
             'price' => ['required', 'numeric'],
             'category_id' => ['required', 'numeric', 'exists:categories,id'],
+            'is_active' => ['required', 'boolean']
         ]);
 
         $item = Item::create($validated);
@@ -55,6 +56,7 @@ class ItemController extends Controller
             'description' => ['sometimes', 'string'],
             'price' => ['sometimes', 'numeric'],
             'category_id' => ['sometimes', 'numeric', 'exists:categories,id'],
+            'is_active' => ['sometimes', 'boolean']
         ]);
 
         $item->update($validated);
