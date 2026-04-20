@@ -8,8 +8,17 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    function index() {
-        $categories = Category::all();
+    function index(Request $request) {
+        $search = $request->input('search');
+
+        $categories = Category::query()
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+                });
+            })
+            ->paginate($request->input('per_page'));
 
         return CategoryResource::collection($categories);
     }
