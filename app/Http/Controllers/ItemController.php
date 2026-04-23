@@ -27,6 +27,12 @@ class ItemController extends Controller
         return ItemResource::collection($items);
     }
 
+    function show(string $id) {
+        $item = Item::with(['category', 'image'])->findOrFail($id);
+
+        return new ItemResource($item);
+    }
+
     function store(Request $request) {
         $validated = $request->validate([
             'name' => ['required', 'string'],
