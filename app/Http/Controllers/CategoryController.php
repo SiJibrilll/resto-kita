@@ -23,6 +23,12 @@ class CategoryController extends Controller
         return CategoryResource::collection($categories);
     }
 
+    function show(string $id) {
+        $category = Category::findOrFail($id);
+
+        return new CategoryResource($category);
+    }
+
     function store(Request $request) {
         $validated = $request->validate([
             'name' => ['required', 'string'],
