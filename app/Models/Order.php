@@ -19,4 +19,16 @@ class Order extends Model
     function items() {
         return $this->hasMany(OrderItem::class);
     }
+
+    function tableSession() {
+        return $this->belongsTo(TableSession::class);
+    }
+
+    function getPaymentAttribute() {
+        return $this->tableSession?->invoice?->payment;
+    }
+
+    function getTableAttribute() {
+        return $this->tableSession?->table;
+    }
 }

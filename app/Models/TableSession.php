@@ -22,4 +22,8 @@ class TableSession extends Model
     function invoice() {
         return $this->hasOne(Invoice::class);
     }
+
+    function table() {
+        return $this->belongsTo(Table::class);
+    }
 }

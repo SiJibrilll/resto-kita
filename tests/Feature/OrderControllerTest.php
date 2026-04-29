@@ -53,4 +53,12 @@ class OrderControllerTest extends TestCase
         $response->assertJsonPath('data.confirmed', true);
         $response->assertJsonPath('data.order_items.0.item.id', $item1->id);
     }
+
+    function test_it_can_display_orders_for_admin() {
+        $this->actingAsSanctum();
+
+        $response = $this->getJson(route('admin.orders.index'));
+
+        $response->dump();
+    }
 }

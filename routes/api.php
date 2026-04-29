@@ -10,6 +10,7 @@ use App\Models\Table;
 use App\Models\TableSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
 Route::middleware('table_session.validate')->group(function () {
     Route::apiResource('items', ItemController::class);
@@ -29,9 +30,16 @@ Route::get('/payments/status/{invoiceId}', [PaymentController::class, 'status'])
 
 Route::post('/table-sessions/generate', [TableSessionController::class, 'generateSession']);
 
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+
+Route::prefix('admin')->name('admin.')->middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/me', [AuthController::class, 'me'])->name('me');
+
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('items', ItemController::class);
+
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
 });
 
 // Route::get('/sementara', function ()  {

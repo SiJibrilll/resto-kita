@@ -3,12 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\OrderResource;
+use App\Models\Order;
 use App\Models\TableSession;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
     function index(Request $request) {
+        //admin data
+        if (Auth::check()) {
+            $orders = Order::with(['tableSession.invoice.payment', 'tableSession.table'])->paginate($request->input('per_page', 10));
+            // dd($orders->first()->table);
+            return OrderResource::collection($orders);
+        }
+
+        //normal user data
         $tableSession = $request->table_session;
 
         $orders = $tableSession->orders()->with('items.item')->get();
@@ -34,4 +44,6 @@ class OrderController extends Controller
 
         return new OrderResource($order);
     }
+
+
 }

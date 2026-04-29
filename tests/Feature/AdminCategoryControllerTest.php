@@ -15,12 +15,16 @@ class AdminCategoryControllerTest extends TestCase
      */
     public function test_it_can_show_category_for_admin(): void
     {
+        $this->actingAsSanctum();
+
         $response = $this->get(route('admin.categories.index'));
 
         $response->assertStatus(200);
     }
 
     function test_it_can_store_category_for_admin() {
+        $this->actingAsSanctum();
+
         $payload = [
             'name' => 'Drinks',
             'description' => "Minuman segar"
@@ -36,6 +40,8 @@ class AdminCategoryControllerTest extends TestCase
     }
 
     function test_it_can_update_category_for_admin() {
+        $this->actingAsSanctum();
+
         $id = 1;
         $payload = [
             'name' => 'Food',
@@ -52,6 +58,8 @@ class AdminCategoryControllerTest extends TestCase
     }
 
     function test_it_can_delete_category_for_admin() {
+        $this->actingAsSanctum();
+        
         $category = Category::find(2);
 
         $response = $this->deleteJson(route('admin.categories.destroy', ['category' => $category->id]));
