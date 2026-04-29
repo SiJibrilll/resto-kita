@@ -11,17 +11,9 @@ use Illuminate\Support\Facades\Auth;
 class OrderController extends Controller
 {
     function index(Request $request) {
-        //admin data
-        if (Auth::check()) {
-            $orders = Order::with(['tableSession.invoice.payment', 'tableSession.table'])->paginate($request->input('per_page', 10));
-
-            return OrderResource::collection($orders);
-        }
-
-        //normal user data
         $tableSession = $request->table_session;
 
-        $orders = $tableSession->orders()->with('items.item')->get();
+        $orders = $tableSession->orders()->with('items.item')->paginate($request->input('per_page', 10));
 
         return OrderResource::collection($orders);
     }
@@ -43,5 +35,11 @@ class OrderController extends Controller
         $order->refresh()->load('items.item');
 
         return new OrderResource($order);
+    }
+
+    function adminIndex(Request $request) {
+        $orders = Order::with(['tableSession.invoice.payment', 'tableSession.table'])->paginate($request->input('per_page', 10));
+
+        return OrderResource::collection($orders);
     }
 }

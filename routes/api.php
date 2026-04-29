@@ -39,7 +39,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:sanctum')->group(functi
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('items', ItemController::class);
 
-    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders', [OrderController::class, 'adminIndex'])->name('orders.index');
 });
 
 // Route::get('/sementara', function ()  {
