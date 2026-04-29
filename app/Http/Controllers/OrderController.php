@@ -14,7 +14,7 @@ class OrderController extends Controller
         //admin data
         if (Auth::check()) {
             $orders = Order::with(['tableSession.invoice.payment', 'tableSession.table'])->paginate($request->input('per_page', 10));
-            // dd($orders->first()->table);
+
             return OrderResource::collection($orders);
         }
 
@@ -44,6 +44,4 @@ class OrderController extends Controller
 
         return new OrderResource($order);
     }
-
-
 }

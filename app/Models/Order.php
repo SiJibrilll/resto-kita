@@ -3,12 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Order extends Model
 {
     
+    protected static function booted()
+    {
+        static::creating(function ($order) {
+           $order->order_id = 'ORD-' . now()->format('d-m-Y') . '-' . Str::upper(Str::random(6));
+        });
+    }
+    
     protected $fillable = [
         'table_session_id',
+        'order_id',
         'confirmed'
     ];
 

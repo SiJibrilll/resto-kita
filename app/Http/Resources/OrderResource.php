@@ -16,6 +16,7 @@ class OrderResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'order_id' => $this->order_id,
             'confirmed' => $this->confirmed,
             'order_items' => OrderItemResource::collection($this->whenLoaded('items')),
             'payment_status' => optional($this->payment)->status ?: 'unpaid',
