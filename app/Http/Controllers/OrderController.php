@@ -18,6 +18,12 @@ class OrderController extends Controller
         return OrderResource::collection($orders);
     }
 
+    function show(string $id, Request $request) {
+        $order = Order::with(['tableSession.invoice.payment', 'tableSession.table'])->findOrFail($id);
+
+        return OrderResource::collection($order);
+    }
+
     function store(Request $request) {
         $tableSession = $request->table_session;
 

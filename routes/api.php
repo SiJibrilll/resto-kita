@@ -17,7 +17,7 @@ Route::middleware('table_session.validate')->group(function () {
     
     Route::apiResource('categories', CategoryController::class)->only(['show', 'index']);
     
-    Route::apiResource('orders', OrderController::class);
+    Route::apiResource('orders', OrderController::class)->only(['index', 'store']);
 
     Route::post('/table-sessions/{token}/checkout', [CheckoutController::class, 'checkout']);
 });
@@ -40,6 +40,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:sanctum')->group(functi
     Route::apiResource('items', ItemController::class);
 
     Route::get('/orders', [OrderController::class, 'adminIndex'])->name('orders.index');
+    Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
 });
 
 // Route::get('/sementara', function ()  {
