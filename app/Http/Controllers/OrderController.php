@@ -19,9 +19,9 @@ class OrderController extends Controller
     }
 
     function show(string $id, Request $request) {
-        $order = Order::with(['tableSession.invoice.payment', 'tableSession.table'])->findOrFail($id);
+        $order = Order::with(['tableSession.invoice.payment', 'tableSession.table', 'items.item'])->findOrFail($id);
 
-        return OrderResource::collection($order);
+        return new OrderResource($order);
     }
 
     function store(Request $request) {
