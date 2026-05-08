@@ -44,7 +44,7 @@ class OrderController extends Controller
     }
 
     function adminIndex(Request $request) {
-        $orders = Order::with(['tableSession.invoice.payment', 'tableSession.table'])->paginate($request->input('per_page', 10));
+        $orders = Order::with(['tableSession.invoice.payment', 'tableSession.table', 'tableSession'])->paginate($request->input('per_page', 10));
 
         return OrderResource::collection($orders);
     }

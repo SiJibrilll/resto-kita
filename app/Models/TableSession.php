@@ -7,12 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 class TableSession extends Model
 {
 
+protected $casts = [
+    'seated_at'      => 'datetime',
+    'checked_out_at' => 'datetime',
+];
+
     protected $fillable = [
         'table_id',
         'token',
         'status',
         'seated_at',
-        'checked_out_at'
+        'checked_out_at',
+        'customer_name'
     ];
     
     function orders() {

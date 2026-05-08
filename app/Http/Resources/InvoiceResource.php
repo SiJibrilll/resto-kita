@@ -18,7 +18,12 @@ class InvoiceResource extends JsonResource
             'id' => $this->id,
             'grand_total' => $this->grand_total,
             'status' => $this->status,
-            'orders' => OrderResource::collection($this->whenLoaded('table_session')->orders)
+            // 'orders' => OrderResource::collection($this->whenLoaded('table_session')->orders)
+            'orders' => OrderResource::collection(
+                $this->whenLoaded('table_session', function () {
+                    return $this->table_session->orders;
+                })
+            ),
         ];
     }
 }

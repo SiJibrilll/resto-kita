@@ -158,6 +158,7 @@ class DatabaseSeeder extends Seeder
 
         $tableSession = TableSession::create([
             'table_id' => $table->id,
+            'customer_name' => "Andi",
             'token' => 'abc',
             'seated_at' => now()
         ]);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TableSessionResource;
 use App\Models\Table;
 use App\Models\TableSession;
 use Illuminate\Http\Request;
@@ -12,9 +13,16 @@ use function Symfony\Component\Clock\now;
 
 class TableSessionController extends Controller
 {
+    function index(Request $request) {
+        $tableSessions = TableSession::with(['invoice', 'table', 'orders'])->paginate($request->input('per_page', 10));
+
+        return TableSessionResource::collection($tableSessions);
+    }
+
     function generateSession(Request $request) {
         $validated = $request->validate([
-            'table_id' => ['required', 'numeric', 'exists:tables,id']
+            'table_id' => ['required', 'numeric', 'exists:tables,id'],
+            'customer_name' => ['required', 'string']
         ]);
 
         $table = Table::find($validated['table_id']);
@@ -28,6 +36,7 @@ class TableSessionController extends Controller
         $session = TableSession::create([
             'table_id' => $table->id,
             'token' => Str::ulid(),
+            'customer_name' => $validated['customer_name'],
             'seated_at' => now()
         ]);
 

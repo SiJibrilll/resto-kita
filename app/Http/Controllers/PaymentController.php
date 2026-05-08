@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PaymentResource;
 use App\Models\Invoice;
 use App\Models\Payment;
 use Illuminate\Http\Request;
@@ -17,6 +18,34 @@ class PaymentController extends Controller
         Config::$isProduction = config('midtrans.is_production');
         Config::$isSanitized  = config('midtrans.is_sanitized');
         Config::$is3ds        = config('midtrans.is_3ds');
+    }
+
+    function cashTransaction(Request $request) {
+        $validated = $request->validate([
+            'invoice_id' => ['required', 'exists:invoices,id'],
+            'customer_name' => ['required', 'string'],
+        ]);
+
+        $invoice = Invoice::with('payment')->find($validated['invoice_id']);
+
+        if ($invoice->payment) {
+            if ($invoice->payment->status == 'paid') {
+                return new PaymentResource($invoice->payment)->additional(['message' => "Pesanan sudah dibayar!"])->response()->setStatusCode(403);
+            }
+        }
+
+        $payment = $invoice->payment()->create([
+                'customer_name' => $validated['customer_name'],
+                'payment_method' => 'cash',
+                'status' => 'paid',
+                'grand_total' => $invoice->grand_total
+        ]);
+
+        $invoice->update([
+            'status' => 'paid'
+        ]);
+
+        return new PaymentResource($payment)->additional(['message' => "Pesanan berhasil dibayar!"]);
     }
 
     function createTransaction(Request $request) {

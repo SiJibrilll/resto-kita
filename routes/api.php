@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TableController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ItemController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\TableSessionController;
 use App\Models\Table;
 use App\Models\TableSession;
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
@@ -28,8 +30,6 @@ Route::post('/payments/webhook', [PaymentController::class, 'handleWebhook']);
 
 Route::get('/payments/status/{invoiceId}', [PaymentController::class, 'status']);
 
-Route::post('/table-sessions/generate', [TableSessionController::class, 'generateSession']);
-
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 Route::prefix('admin')->name('admin.')->middleware('auth:sanctum')->group(function () {
@@ -38,9 +38,15 @@ Route::prefix('admin')->name('admin.')->middleware('auth:sanctum')->group(functi
 
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('items', ItemController::class);
+    Route::apiResource('tables', TableController::class);
 
     Route::get('/orders', [OrderController::class, 'adminIndex'])->name('orders.index');
     Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+
+    Route::get('/table-sessions', [TableSessionController::class, 'index'])->name('table-session.index');
+    Route::post('/table-sessions/generate', [TableSessionController::class, 'generateSession'])->name('table-session.generate');
+
+    Route::post('/cash-transaction', [PaymentController::class, 'cashTransaction'])->name('payment.cash-transaction');
 });
 
 // Route::get('/sementara', function ()  {

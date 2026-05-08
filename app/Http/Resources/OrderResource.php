@@ -19,6 +19,7 @@ class OrderResource extends JsonResource
             'order_id' => $this->order_id,
             'confirmed' => $this->confirmed,
             'order_items' => OrderItemResource::collection($this->whenLoaded('items')),
+            'customer_name' => $this->whenLoaded('tableSession', $this->tableSession->customer_name),
             'payment_status' => optional($this->payment)->status ?: 'unpaid',
             'payment_method' => optional($this->payment)->payment_method,
             'ordered_at' => $this->created_at->translatedFormat('l, j F, Y'),
