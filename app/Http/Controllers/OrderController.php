@@ -13,7 +13,7 @@ class OrderController extends Controller
     function index(Request $request) {
         $tableSession = $request->table_session;
 
-        $orders = $tableSession->orders()->with('items.item')->paginate($request->input('per_page', 10));
+        $orders = $tableSession->orders()->with(['items.item', 'tableSession.table'])->paginate($request->input('per_page', 10));
 
         return OrderResource::collection($orders);
     }

@@ -151,7 +151,7 @@ class DatabaseSeeder extends Seeder
 
         for ($i=1; $i <= 10; $i++) { 
             $table = Table::create([
-                'number' => 1,
+                'number' => $i,
             ]);
         }
         
