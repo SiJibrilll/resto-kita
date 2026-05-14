@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EmployeeController;
 
 Route::middleware('table_session.validate')->group(function () {
     Route::apiResource('items', ItemController::class);
@@ -47,6 +48,8 @@ Route::prefix('admin')->name('admin.')->middleware('auth:sanctum')->group(functi
     Route::post('/table-sessions/generate', [TableSessionController::class, 'generateSession'])->name('table-session.generate');
 
     Route::post('/cash-transaction', [PaymentController::class, 'cashTransaction'])->name('payment.cash-transaction');
+
+    Route::apiResource('employees', EmployeeController::class);
 });
 
 // Route::get('/sementara', function ()  {
