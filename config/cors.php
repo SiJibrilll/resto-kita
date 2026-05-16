@@ -20,7 +20,8 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
-        "https://resto-kita.vercel.app"
+        "https://resto-kita.vercel.app",
+        "http://localhost:3000"
     ],
 
     'allowed_origins_patterns' => [],
