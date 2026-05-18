@@ -3,6 +3,7 @@
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\DahsboardController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
@@ -52,6 +53,8 @@ Route::prefix('admin')->name('admin.')->middleware('auth:sanctum')->group(functi
     Route::apiResource('employees', EmployeeController::class);
 
     Route::post('/employees/{employee}/change-password', [EmployeeController::class, 'changePassword'])->name('employees.change-password');
+
+    Route::get('/dashboard', [DahsboardController::class, 'index']);
 });
 
 // Route::get('/sementara', function ()  {
