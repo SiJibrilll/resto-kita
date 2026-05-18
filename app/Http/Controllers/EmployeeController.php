@@ -6,6 +6,7 @@ use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class EmployeeController extends Controller
 {
@@ -91,10 +92,45 @@ class EmployeeController extends Controller
      */
     public function destroy(Employee $employee)
     {
+        $user = $employee->user;
+
+        $user->delete();
+        
         $employee->delete();
 
         return response()->json([
             'message' => "Delete sucessful"
        ], 200);
+    }
+
+    public function changePassword(Request $request, Employee $employee)
+    {
+        $request->validate([
+            'current_password' => ['required'],
+            'new_password' => ['required', 'min:8', 'confirmed'],
+        ]);
+
+        $user = $employee->user;
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Data karyawan yang dipilih belum memiliki akun'
+            ], 401);
+        }
+
+        // Check old password
+        if (! Hash::check($request->current_password, $user->password)) {
+            return response()->json([
+                'message' => 'Current password is incorrect'
+            ], 422);
+        }
+
+        // Update password
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return response()->json([
+            'message' => 'Password updated successfully'
+        ]);
     }
 }

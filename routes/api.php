@@ -50,6 +50,8 @@ Route::prefix('admin')->name('admin.')->middleware('auth:sanctum')->group(functi
     Route::post('/cash-transaction', [PaymentController::class, 'cashTransaction'])->name('payment.cash-transaction');
 
     Route::apiResource('employees', EmployeeController::class);
+
+    Route::post('/employees/{employee}/change-password', [EmployeeController::class, 'changePassword'])->name('employees.change-password');
 });
 
 // Route::get('/sementara', function ()  {
