@@ -23,6 +23,8 @@ Route::middleware('table_session.validate')->group(function () {
     
     Route::apiResource('orders', OrderController::class)->only(['index', 'store']);
 
+    Route::get('/table-sessions', [TableSessionController::class, 'getIdentity']);
+
     Route::post('/table-sessions/{token}/checkout', [CheckoutController::class, 'checkout']);
 });
     
