@@ -13,6 +13,13 @@ use function Symfony\Component\Clock\now;
 
 class TableSessionController extends Controller
 {
+    function getIdentity(Request $request) {
+        $tableSession = $request->table_session;
+        $tableSession->load(['table', 'orders']);
+
+        return new TableSessionResource($tableSession);
+    }
+
     function index(Request $request) {
         $tableSessions = TableSession::with(['invoice', 'table', 'orders'])->paginate($request->input('per_page', 10));
 
